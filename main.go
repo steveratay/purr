@@ -66,6 +66,7 @@ func main() {
 	cmdList = append(cmdList, &WatchCmd{config: conf})
 	cmdList = append(cmdList, &UnwatchCmd{config: conf})
 	cmdList = append(cmdList, &ListCmd{config: conf})
+	cmdList = append(cmdList, &WhiteListCmd{config: conf})
 	connectToSlack(conf)
 }
 
