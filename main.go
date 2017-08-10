@@ -120,8 +120,8 @@ func trawlGitHub(conf *Config) <-chan *PullRequest {
 			repos = append(repos, repoName)
 			continue
 		}
-		logrus.Debugf("expanding wildcard on %s", repoName)
-		allRepos, _, err := client.Repositories.List(context.Background(), repoParts[0], nil)
+		logrus.Debugf("expanding wildcards on %s", repoName)
+		allRepos, _, err := client.Repositories.ListByOrg(context.Background(), repoParts[0], nil)
 		if err != nil {
 			logrus.Error(err)
 			continue
