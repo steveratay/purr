@@ -121,10 +121,23 @@ func trawlGitHub(conf *Config) <-chan *PullRequest {
 			continue
 		}
 		logrus.Debugf("expanding wildcards on %s", repoName)
-		allRepos, _, err := client.Repositories.ListByOrg(context.Background(), repoParts[0], nil)
-		if err != nil {
-			logrus.Error(err)
-			continue
+
+		opt := &github.RepositoryListByOrgOptions{
+			ListOptions: github.ListOptions{PerPage: 30},
+		}
+		var allRepos []*github.Repository
+		for {
+			repos, resp, err := client.Repositories.ListByOrg(context.Background(), repoParts[0], opt)
+			if err != nil {
+				logrus.Error(err)
+				continue
+			}
+			logrus.Debugf("NextPage: %d", resp.NextPage)
+			allRepos = append(allRepos, repos...)
+			if resp.NextPage == 0 {
+				break
+			}
+			opt.Page = resp.NextPage
 		}
 		for i := range allRepos {
 			repos = append(repos, fmt.Sprintf("%s/%s", repoParts[0], *allRepos[i].Name))
