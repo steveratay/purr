@@ -1,3 +1,5 @@
 .env
 *.json
 purr
+handler.so
+handler.zip
